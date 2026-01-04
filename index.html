@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lub - Laboratory for Urban Boundaries</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 class="logo">lub</h1>
+        <nav>
+            <a href="index.html" class="active">Projects</a>
+            <span class="separator">/</span>
+            <a href="about.html">About</a>
+            <span class="separator">/</span>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="gallery-page">
+        <div class="gallery-container">
+            <button class="gallery-nav prev" aria-label="Previous image">‹</button>
+            <div class="gallery-wrapper">
+                <img src="" alt="" class="gallery-image" id="mainImage">
+            </div>
+            <button class="gallery-nav next" aria-label="Next image">›</button>
+        </div>
+        <div class="gallery-indicator">
+            <span id="currentIndex">1</span> / <span id="totalImages">1</span>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 - 2025 Laboratory for Urban Boundaries.</p>
+        <p>All rights reserved.</p>
+    </footer>
+
+    <script src="js/gallery.js"></script>
+</body>
+</html>

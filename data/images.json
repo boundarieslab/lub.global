@@ -1,0 +1,16 @@
+{
+  "images": [
+    {
+      "url": "images/project-01.jpg",
+      "caption": "Field workshop in the forest, Oslo 2024"
+    },
+    {
+      "url": "images/project-02.jpg",
+      "caption": "Community mapping session"
+    },
+    {
+      "url": "images/project-03.jpg",
+      "caption": "Ravine documentation"
+    }
+  ]
+}
