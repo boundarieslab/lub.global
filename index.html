@@ -1,35 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lub - Laboratory for Urban Boundaries</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lub</title>
+  <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: Helvetica, Arial, sans-serif; background: #fff; color: #000; cursor: crosshair; }
+body.no-scroll { overflow: hidden; }
+
+.nav { 
+  position: fixed; 
+  top: 40px; 
+  left: 40px; 
+  right: 40px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+  z-index: 100;
+  mix-blend-mode: difference;
+}
+.nav-logo { font-size: 32px; font-weight: 700; color: #fff; }
+.nav-links { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.nav-links a { 
+  color: #999; 
+  text-decoration: none; 
+  font-size: 28px; 
+  font-weight: 700; 
+  transition: color 0.2s; 
+}
+.nav-links a:hover { color: #fff; }
+
+.main { 
+  height: 100vh; 
+  padding: 100px 40px 40px; 
+  display: flex; 
+  flex-direction: column;
+}
+
+.slideshow { 
+  flex: 1; 
+  background: #f5f5f5; 
+  position: relative; 
+  cursor: pointer;
+  min-height: 0;
+  overflow: hidden;
+}
+.slideshow:hover { background: #f0f0f0; }
+.slideshow-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.slideshow-img.active { opacity: 1; }
+.slideshow-count { position: absolute; bottom: 20px; left: 20px; font-size: 14px; color: #aaa; }
+.slideshow-arrows { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 8px; }
+.slideshow-arrows button { 
+  background: #fff; 
+  border: 1px solid #ddd; 
+  color: #666; 
+  width: 44px; 
+  height: 44px; 
+  font-size: 16px; 
+  cursor: pointer; 
+  transition: all 0.2s; 
+  font-family: inherit; 
+}
+.slideshow-arrows button:hover { border-color: #000; color: #000; }
+
+.modal { 
+  position: fixed; 
+  inset: 0; 
+  background: rgba(255,255,255,0.98); 
+  z-index: 500; 
+  display: none; 
+  backdrop-filter: blur(20px); 
+}
+.modal.active { display: flex; }
+.modal-inner { display: flex; width: 100%; height: 100%; }
+.modal-img { 
+  flex: 1; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 60px; 
+}
+.modal-img img { 
+  max-width: 100%; 
+  max-height: 100%; 
+  object-fit: contain; 
+}
+.modal-side { 
+  width: 360px; 
+  padding: 60px 40px; 
+  border-left: 1px solid #eee; 
+  display: flex; 
+  flex-direction: column; 
+}
+.modal-close { 
+  position: absolute; 
+  top: 24px; 
+  right: 24px; 
+  background: none; 
+  border: none; 
+  color: #999; 
+  font-size: 32px; 
+  cursor: pointer; 
+  font-family: inherit; 
+}
+.modal-close:hover { color: #000; }
+.modal-label { 
+  font-size: 12px; 
+  color: #FF00FF; 
+  letter-spacing: 0.1em; 
+  margin-bottom: 20px; 
+  font-weight: 700; 
+}
+.modal-title { 
+  font-size: 24px; 
+  font-weight: 700; 
+  margin-bottom: 32px; 
+  line-height: 1.3; 
+}
+.modal-desc { 
+  font-size: 15px; 
+  color: #666; 
+  line-height: 1.8; 
+}
+.modal-nav { 
+  margin-top: auto; 
+  display: flex; 
+  gap: 8px; 
+}
+.modal-nav button { 
+  background: #fff; 
+  border: 1px solid #ddd; 
+  color: #666; 
+  width: 44px; 
+  height: 44px; 
+  font-size: 16px; 
+  cursor: pointer; 
+  font-family: inherit;
+}
+.modal-nav button:hover { border-color: #000; color: #000; }
+
+.search { 
+  position: fixed; 
+  inset: 0; 
+  background: #fff; 
+  z-index: 600; 
+  display: none; 
+  flex-direction: column; 
+}
+.search.active { display: flex; }
+.search-header { 
+  padding: 40px; 
+  border-bottom: 1px solid #eee; 
+  display: flex; 
+  align-items: center; 
+  gap: 16px; 
+}
+.search-input { 
+  flex: 1; 
+  border: none; 
+  outline: none; 
+  font-size: 28px; 
+  font-family: inherit; 
+  font-weight: 700; 
+}
+.search-input::placeholder { color: #ccc; }
+.search-close { 
+  background: none; 
+  border: none; 
+  font-size: 28px; 
+  color: #999; 
+  cursor: pointer; 
+  font-family: inherit; 
+}
+.search-close:hover { color: #000; }
+.search-results { flex: 1; padding: 40px; overflow-y: auto; }
+.search-empty { color: #ccc; font-size: 18px; }
+
+.about { 
+  position: fixed; 
+  inset: 0; 
+  background: #FF00FF; 
+  z-index: 600; 
+  display: none; 
+  padding: 60px; 
+  overflow-y: auto; 
+}
+.about.active { display: flex; flex-direction: column; justify-content: center; }
+.about-close { 
+  position: absolute; 
+  top: 40px; 
+  right: 40px; 
+  background: none; 
+  border: none; 
+  font-size: 32px; 
+  cursor: pointer; 
+  color: #fff; 
+  font-family: inherit; 
+}
+.about-content { max-width: 800px; }
+.about-text { 
+  font-size: 24px; 
+  line-height: 1.6; 
+  color: #fff; 
+  margin-bottom: 28px; 
+}
+.about-founders { 
+  font-size: 14px; 
+  color: rgba(255,255,255,0.7); 
+  margin-bottom: 40px; 
+  letter-spacing: 0.05em; 
+}
+.about-cta { 
+  font-size: 18px; 
+  color: #fff; 
+  margin-top: 40px; 
+  padding-top: 40px; 
+  border-top: 1px solid rgba(255,255,255,0.3); 
+}
+.about-contact { 
+  margin-top: 48px; 
+  font-size: 16px; 
+  color: rgba(255,255,255,0.7); 
+  line-height: 2; 
+}
+.about-contact a { color: #fff; text-decoration: none; }
+.about-contact a:hover { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .modal-inner { flex-direction: column; }
+  .modal-side { width: 100%; border-left: none; border-top: 1px solid #eee; padding: 32px; }
+  .nav-links a { font-size: 20px; }
+  .about-text { font-size: 20px; }
+}
+
+@media (max-width: 600px) {
+  .nav { left: 20px; right: 20px; top: 24px; }
+  .nav-logo { font-size: 24px; }
+  .nav-links a { font-size: 18px; }
+  .main { padding: 80px 20px 20px; }
+  .about { padding: 40px; }
+  .about-text { font-size: 18px; }
+}
+  </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <a href="#" class="logo">lub</a>
-        <nav>
-            <a href="#work">work</a>
-            <a href="#about">about</a>
-        </nav>
-    </header>
+<nav class="nav">
+  <div class="nav-logo">lub</div>
+  <div class="nav-links">
+    <!-- <a href="#" id="searchBtn">Search</a> -->
+    <!-- <a href="#" id="workBtn">Work</a> -->
+    <a href="#" id="aboutBtn">About</a>
+  </div>
+</nav>
 
-    <!-- Main content container -->
-    <main id="content">
-        <!-- Content loads here from JS -->
-    </main>
+<main class="main">
+  <div class="slideshow" id="slideshow">
+    <div class="slideshow-count"><span id="current">1</span> / <span id="total">1</span></div>
+    <div class="slideshow-arrows">
+      <button id="prev">←</button>
+      <button id="next">→</button>
+    </div>
+  </div>
+</main>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2024 – 2025 Laboratory for Urban Boundaries</p>
-    </footer>
+<div class="modal" id="modal">
+  <button class="modal-close" id="modalClose">×</button>
+  <div class="modal-inner">
+    <div class="modal-img" id="modalImgContainer"></div>
+    <div class="modal-side">
+      <div class="modal-label">RAVINEVANDRING</div>
+      <h2 class="modal-title" id="modalTitle">Title</h2>
+      <p class="modal-desc" id="modalDesc">Description</p>
+      <div class="modal-nav">
+        <button id="modalPrev">←</button>
+        <button id="modalNext">→</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <!-- Marked.js for parsing markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="js/main.js"></script>
+<div class="search" id="search">
+  <div class="search-header">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+    <button class="search-close" id="searchClose">×</button>
+  </div>
+  <div class="search-results">
+    <p class="search-empty">Type to search</p>
+  </div>
+</div>
+
+<div class="about" id="about">
+  <button class="about-close" id="aboutClose">×</button>
+  <div class="about-content">
+    <p class="about-founders">Anne Marte Aure · Paolo Ricci · Thibault Felix</p>
+    <p class="about-text">Laboratory for Urban Boundaries was founded to challenge and reconfigure the frameworks of urban development. We are a collective of architects and researchers who support grassroots movements for ecological and social justice through spatial interventions and participatory design strategies.</p>
+    <p class="about-text">Our methodology emphasizes long-term relationship building and knowledge co-production with local residents. We focus on building bridges between communities and institutional planning bodies.</p>
+    <p class="about-text">Our primary work has been concentrated in Norway, where we have sustained a movement for the protection of ravines north of Oslo through public engagement, spatial documentation, and alternative planning proposals.</p>
+    <p class="about-cta">We are actively seeking partnerships with organizations, communities, and researchers working on spatial justice and environmental protection.</p>
+    <div class="about-contact">
+      <a href="mailto:hello@lub.global">hello@lub.global</a><br>
+      Tøyengata 38A, 0578 Oslo
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+===========================================
+SLIDES DATA - Edit here to add images
+===========================================
+*/
+const slides = [
+  { 
+    image: "images/ravinevandring/damaged-pipe.jpg",
+    title: "Damaged Infrastructure", 
+    desc: "Exposed pipe damage in the ravine system, documenting the effects of terrain instability on urban infrastructure." 
+  },
+  { 
+    image: "images/ravinevandring/roedhyll.jpg",
+    title: "Rødhyll", 
+    desc: "Documentation of the Rødhyll area during fieldwork." 
+  },
+  { 
+    image: "images/backhistory/flom-1967-boat.jpg",
+    title: "Flom 1967", 
+    desc: "Men in a boat loading supplies from a store during the 1967 floods. The 'Snarkjøp' store sign is visible." 
+  },
+  { 
+    image: "images/backhistory/flom-1967-bike.png",
+    title: "Flom 1967 — Syklister", 
+    desc: "Cyclists navigating flooded streets during the 1967 floods on Romerike." 
+  },
+  { 
+    image: "images/backhistory/terrain-1967.png",
+    title: "Terrengskader 1967", 
+    desc: "Terrain damage documented after the 1967 floods." 
+  },
+  { 
+    image: "images/backhistory/traktorvelt-1965.png",
+    title: "Traktorvelt 1965", 
+    desc: "Tractor accident from 1965 showing terrain instability." 
+  },
+  { 
+    image: "images/backhistory/bulldozer-1950s.jpg",
+    title: "Bulldoser 1950-tallet", 
+    desc: "Bulldozer operations in the 1950s, early documentation of mass earth movement." 
+  },
+  { 
+    image: "images/backhistory/excavation-1927.png",
+    title: "Utgravning 1927", 
+    desc: "Archaeological excavation from 1927, one of the earliest documented terrain modifications." 
+  },
+  { 
+    image: "images/dirty-business/contemporary-2023.jpg",
+    title: "Contemporary Operations 2023", 
+    desc: "Current mass movement operations documented in 2023." 
+  },
+  { 
+    image: "images/dirty-business/skredkart.png",
+    title: "Skredkart", 
+    desc: "Landslide hazard mapping of the region." 
+  },
+];
+
+/*
+===========================================
+PROJECTS - For future expansion
+===========================================
+*/
+const projects = [
+  {
+    id: "ravinevandring",
+    label: "RAVINEVANDRING",
+    title: "Ravinevandring",
+    subtitle: "Protection of Ravines North of Oslo",
+    color: "#FF00FF",
+  },
+];
+
+/*
+===========================================
+SLIDESHOW
+===========================================
+*/
+let current = 0;
+const total = slides.length;
+const slideshow = document.getElementById('slideshow');
+const currentEl = document.getElementById('current');
+const totalEl = document.getElementById('total');
+
+totalEl.textContent = total;
+
+// Create image elements
+slides.forEach((slide, i) => {
+  const img = document.createElement('img');
+  img.src = slide.image;
+  img.className = 'slideshow-img' + (i === 0 ? ' active' : '');
+  img.alt = slide.title;
+  slideshow.insertBefore(img, slideshow.firstChild);
+});
+
+const imgElements = document.querySelectorAll('.slideshow-img');
+
+function updateSlide() {
+  currentEl.textContent = current + 1;
+  imgElements.forEach((img, i) => {
+    img.classList.toggle('active', i === current);
+  });
+  document.getElementById('modalTitle').textContent = slides[current].title;
+  document.getElementById('modalDesc').textContent = slides[current].desc;
+  document.getElementById('modalImgContainer').innerHTML = `<img src="${slides[current].image}" alt="${slides[current].title}">`;
+}
+
+function nextSlide() {
+  current = (current + 1) % total;
+  updateSlide();
+}
+
+function prevSlide() {
+  current = (current - 1 + total) % total;
+  updateSlide();
+}
+
+document.getElementById('prev').onclick = (e) => { e.stopPropagation(); prevSlide(); };
+document.getElementById('next').onclick = (e) => { e.stopPropagation(); nextSlide(); };
+document.getElementById('modalPrev').onclick = prevSlide;
+document.getElementById('modalNext').onclick = nextSlide;
+
+slideshow.onclick = (e) => {
+  if (e.target.tagName === 'BUTTON') return;
+  document.getElementById('modal').classList.add('active');
+  document.body.classList.add('no-scroll');
+};
+
+/*
+===========================================
+MODAL
+===========================================
+*/
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.classList.remove('no-scroll');
+}
+
+document.getElementById('modalClose').onclick = closeModal;
+document.getElementById('modal').onclick = (e) => {
+  if (e.target.id === 'modal') closeModal();
+};
+
+/*
+===========================================
+SEARCH
+===========================================
+*/
+function openSearch() {
+  document.getElementById('search').classList.add('active');
+  document.getElementById('searchInput').focus();
+  document.body.classList.add('no-scroll');
+}
+
+function closeSearch() {
+  document.getElementById('search').classList.remove('active');
+  document.body.classList.remove('no-scroll');
+}
+
+document.getElementById('searchClose').onclick = closeSearch;
+
+/*
+===========================================
+ABOUT
+===========================================
+*/
+function openAbout() {
+  document.getElementById('about').classList.add('active');
+  document.body.classList.add('no-scroll');
+}
+
+function closeAbout() {
+  document.getElementById('about').classList.remove('active');
+  document.body.classList.remove('no-scroll');
+}
+
+document.getElementById('aboutBtn').onclick = (e) => { e.preventDefault(); openAbout(); };
+document.getElementById('aboutClose').onclick = closeAbout;
+
+/*
+===========================================
+KEYBOARD
+===========================================
+*/
+document.onkeydown = (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeSearch();
+    closeAbout();
+  }
+  if (e.key === 'ArrowLeft') prevSlide();
+  if (e.key === 'ArrowRight') nextSlide();
+};
+
+updateSlide();
+</script>
 
 </body>
 </html>
