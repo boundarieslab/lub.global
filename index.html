@@ -259,8 +259,6 @@ body.no-scroll { overflow: hidden; }
 <nav class="nav">
   <div class="nav-logo">lub</div>
   <div class="nav-links">
-    <!-- <a href="#" id="searchBtn">Search</a> -->
-    <!-- <a href="#" id="workBtn">Work</a> -->
     <a href="#" id="aboutBtn">About</a>
   </div>
 </nav>
@@ -319,7 +317,7 @@ body.no-scroll { overflow: hidden; }
 <script>
 /*
 ===========================================
-SLIDES DATA - Edit here to add images
+SLIDES DATA - Edit here to add/change images
 ===========================================
 */
 const slides = [
@@ -377,21 +375,6 @@ const slides = [
 
 /*
 ===========================================
-PROJECTS - For future expansion
-===========================================
-*/
-const projects = [
-  {
-    id: "ravinevandring",
-    label: "RAVINEVANDRING",
-    title: "Ravinevandring",
-    subtitle: "Protection of Ravines North of Oslo",
-    color: "#FF00FF",
-  },
-];
-
-/*
-===========================================
 SLIDESHOW
 ===========================================
 */
@@ -421,7 +404,7 @@ function updateSlide() {
   });
   document.getElementById('modalTitle').textContent = slides[current].title;
   document.getElementById('modalDesc').textContent = slides[current].desc;
-  document.getElementById('modalImgContainer').innerHTML = `<img src="${slides[current].image}" alt="${slides[current].title}">`;
+  document.getElementById('modalImgContainer').innerHTML = '<img src="' + slides[current].image + '" alt="' + slides[current].title + '">';
 }
 
 function nextSlide() {
@@ -434,12 +417,12 @@ function prevSlide() {
   updateSlide();
 }
 
-document.getElementById('prev').onclick = (e) => { e.stopPropagation(); prevSlide(); };
-document.getElementById('next').onclick = (e) => { e.stopPropagation(); nextSlide(); };
+document.getElementById('prev').onclick = function(e) { e.stopPropagation(); prevSlide(); };
+document.getElementById('next').onclick = function(e) { e.stopPropagation(); nextSlide(); };
 document.getElementById('modalPrev').onclick = prevSlide;
 document.getElementById('modalNext').onclick = nextSlide;
 
-slideshow.onclick = (e) => {
+slideshow.onclick = function(e) {
   if (e.target.tagName === 'BUTTON') return;
   document.getElementById('modal').classList.add('active');
   document.body.classList.add('no-scroll');
@@ -456,27 +439,9 @@ function closeModal() {
 }
 
 document.getElementById('modalClose').onclick = closeModal;
-document.getElementById('modal').onclick = (e) => {
+document.getElementById('modal').onclick = function(e) {
   if (e.target.id === 'modal') closeModal();
 };
-
-/*
-===========================================
-SEARCH
-===========================================
-*/
-function openSearch() {
-  document.getElementById('search').classList.add('active');
-  document.getElementById('searchInput').focus();
-  document.body.classList.add('no-scroll');
-}
-
-function closeSearch() {
-  document.getElementById('search').classList.remove('active');
-  document.body.classList.remove('no-scroll');
-}
-
-document.getElementById('searchClose').onclick = closeSearch;
 
 /*
 ===========================================
@@ -493,7 +458,7 @@ function closeAbout() {
   document.body.classList.remove('no-scroll');
 }
 
-document.getElementById('aboutBtn').onclick = (e) => { e.preventDefault(); openAbout(); };
+document.getElementById('aboutBtn').onclick = function(e) { e.preventDefault(); openAbout(); };
 document.getElementById('aboutClose').onclick = closeAbout;
 
 /*
@@ -501,10 +466,9 @@ document.getElementById('aboutClose').onclick = closeAbout;
 KEYBOARD
 ===========================================
 */
-document.onkeydown = (e) => {
+document.onkeydown = function(e) {
   if (e.key === 'Escape') {
     closeModal();
-    closeSearch();
     closeAbout();
   }
   if (e.key === 'ArrowLeft') prevSlide();
