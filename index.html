@@ -5,177 +5,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>lub</title>
   <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; overflow: hidden; }
-body { font-family: Helvetica, Arial, sans-serif; background: #fff; color: #000; cursor: crosshair; }
-body.no-scroll { overflow: hidden; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: Helvetica, Arial, sans-serif; background: #fff; color: #000; cursor: crosshair; }
+    body.no-scroll { overflow: hidden; }
 
-.nav { 
-  position: fixed; 
-  top: 40px; 
-  left: 40px; 
-  right: 40px; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: flex-start; 
-  z-index: 100;
-  mix-blend-mode: difference;
-}
-.nav-logo { font-size: 32px; font-weight: 700; color: #fff; }
-.nav-links { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.nav-links a { 
-  color: #999; 
-  text-decoration: none; 
-  font-size: 28px; 
-  font-weight: 700; 
-  transition: color 0.2s; 
-}
-.nav-links a:hover { color: #fff; }
+    .nav { 
+      position: fixed; 
+      top: 40px; 
+      left: 40px; 
+      right: 40px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: flex-start; 
+      z-index: 100;
+      mix-blend-mode: difference;
+    }
+    .nav-logo { font-size: 32px; font-weight: 700; color: #fff; }
+    .nav-links { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .nav-links a { 
+      color: #999; 
+      text-decoration: none; 
+      font-size: 28px; 
+      font-weight: 700; 
+      transition: color 0.2s; 
+    }
+    .nav-links a:hover { color: #fff; }
 
-.main { 
-  height: 100vh; 
-  padding: 100px 40px 40px; 
-  display: flex; 
-  flex-direction: column;
-}
+    .main { 
+      height: 100vh; 
+      padding: 100px 40px 40px; 
+      display: flex; 
+      flex-direction: column;
+    }
 
-.slideshow { 
-  flex: 1; 
-  background: #f5f5f5; 
-  position: relative; 
-  cursor: pointer;
-  min-height: 0;
-  overflow: hidden;
-}
-.slideshow:hover { background: #f0f0f0; }
-.slideshow-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.slideshow-img.active { opacity: 1; }
-.slideshow-count { position: absolute; bottom: 20px; left: 20px; font-size: 14px; color: #aaa; }
-.slideshow-arrows { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 8px; }
-.slideshow-arrows button { 
-  background: #fff; 
-  border: 1px solid #ddd; 
-  color: #666; 
-  width: 44px; 
-  height: 44px; 
-  font-size: 16px; 
-  cursor: pointer; 
-  transition: all 0.2s; 
-  font-family: inherit; 
-}
-.slideshow-arrows button:hover { border-color: #000; color: #000; }
+    .slideshow { 
+      flex: 1; 
+      background: #f5f5f5; 
+      position: relative; 
+      cursor: pointer;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .slideshow-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .slideshow-img.active { opacity: 1; }
+    .slideshow-count { position: absolute; bottom: 20px; left: 20px; font-size: 14px; color: #aaa; z-index: 10; }
+    .slideshow-arrows { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 8px; z-index: 10; }
+    .slideshow-arrows button { 
+      background: #fff; 
+      border: 1px solid #ddd; 
+      color: #666; 
+      width: 44px; 
+      height: 44px; 
+      font-size: 16px; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+    }
+    .slideshow-arrows button:hover { border-color: #000; color: #000; }
 
-.search { 
-  position: fixed; 
-  inset: 0; 
-  background: #fff; 
-  z-index: 600; 
-  display: none; 
-  flex-direction: column; 
-}
-.search.active { display: flex; }
-.search-header { 
-  padding: 40px; 
-  border-bottom: 1px solid #eee; 
-  display: flex; 
-  align-items: center; 
-  gap: 16px; 
-}
-.search-input { 
-  flex: 1; 
-  border: none; 
-  outline: none; 
-  font-size: 28px; 
-  font-family: inherit; 
-  font-weight: 700; 
-}
-.search-input::placeholder { color: #ccc; }
-.search-close { 
-  background: none; 
-  border: none; 
-  font-size: 28px; 
-  color: #999; 
-  cursor: pointer; 
-  font-family: inherit; 
-}
-.search-close:hover { color: #000; }
-.search-results { flex: 1; padding: 40px; overflow-y: auto; }
-.search-empty { color: #ccc; font-size: 18px; }
+    .about { 
+      position: fixed; 
+      inset: 0; 
+      background: #FF00FF; 
+      z-index: 600; 
+      display: none; 
+      padding: 60px; 
+      overflow-y: auto; 
+    }
+    .about.active { display: flex; flex-direction: column; justify-content: center; }
+    .about-close { 
+      position: absolute; 
+      top: 40px; 
+      right: 40px; 
+      background: none; 
+      border: none; 
+      font-size: 32px; 
+      cursor: pointer; 
+      color: #fff; 
+    }
+    .about-content { max-width: 800px; }
+    .about-text { font-size: 24px; line-height: 1.6; color: #fff; margin-bottom: 28px; }
+    .about-contact { margin-top: 48px; font-size: 16px; color: rgba(255,255,255,0.7); line-height: 2; }
+    .about-contact a { color: #fff; text-decoration: none; }
 
-.about { 
-  position: fixed; 
-  inset: 0; 
-  background: #FF00FF; 
-  z-index: 600; 
-  display: none; 
-  padding: 60px; 
-  overflow-y: auto; 
-}
-.about.active { display: flex; flex-direction: column; justify-content: center; }
-.about-close { 
-  position: absolute; 
-  top: 40px; 
-  right: 40px; 
-  background: none; 
-  border: none; 
-  font-size: 32px; 
-  cursor: pointer; 
-  color: #fff; 
-  font-family: inherit; 
-}
-.about-content { max-width: 800px; }
-.about-text { 
-  font-size: 24px; 
-  line-height: 1.6; 
-  color: #fff; 
-  margin-bottom: 28px; 
-}
-.about-founders { 
-  font-size: 14px; 
-  color: rgba(255,255,255,0.7); 
-  margin-bottom: 40px; 
-  letter-spacing: 0.05em; 
-}
-.about-cta { 
-  font-size: 18px; 
-  color: #fff; 
-  margin-top: 40px; 
-  padding-top: 40px; 
-  border-top: 1px solid rgba(255,255,255,0.3); 
-}
-.about-contact { 
-  margin-top: 48px; 
-  font-size: 16px; 
-  color: rgba(255,255,255,0.7); 
-  line-height: 2; 
-}
-.about-contact a { color: #fff; text-decoration: none; }
-.about-contact a:hover { text-decoration: underline; }
-
-@media (max-width: 900px) {
-  .modal-inner { flex-direction: column; }
-  .modal-side { width: 100%; border-left: none; border-top: 1px solid #eee; padding: 32px; }
-  .nav-links a { font-size: 20px; }
-  .about-text { font-size: 20px; }
-}
-
-@media (max-width: 600px) {
-  .nav { left: 20px; right: 20px; top: 24px; }
-  .nav-logo { font-size: 24px; }
-  .nav-links a { font-size: 18px; }
-  .main { padding: 80px 20px 20px; }
-  .about { padding: 40px; }
-  .about-text { font-size: 18px; }
-}
+    @media (max-width: 600px) {
+      .nav { top: 20px; left: 20px; right: 20px; }
+      .about { padding: 30px; }
+      .about-text { font-size: 18px; }
+    }
   </style>
 </head>
 <body>
@@ -197,25 +123,12 @@ body.no-scroll { overflow: hidden; }
   </div>
 </main>
 
-
-<div class="search" id="search">
-  <div class="search-header">
-    <input type="text" class="search-input" id="searchInput" placeholder="Search...">
-    <button class="search-close" id="searchClose">×</button>
-  </div>
-  <div class="search-results">
-    <p class="search-empty">Type to search</p>
-  </div>
-</div>
-
 <div class="about" id="about">
   <button class="about-close" id="aboutClose">×</button>
   <div class="about-content">
-    <p class="about-founders">Anne Marte Aure · Paolo Ricci · Thibault Felix</p>
-    <p class="about-text">Laboratory for Urban Boundaries was founded to challenge and reconfigure the frameworks of urban development. We are a collective of architects and researchers who support grassroots movements for ecological and social justice through spatial interventions and participatory design strategies.</p>
-    <p class="about-text">Our methodology emphasizes long-term relationship building and knowledge co-production with local residents. We focus on building bridges between communities and institutional planning bodies.</p>
-    <p class="about-text">Our primary work has been concentrated in Norway, where we have sustained a movement for the protection of ravines north of Oslo through public engagement, spatial documentation, and alternative planning proposals.</p>
-    <p class="about-cta">We are actively seeking partnerships with organizations, communities, and researchers working on spatial justice and environmental protection.</p>
+    <p style="color: rgba(255,255,255,0.7); margin-bottom: 20px;">Anne Marte Aure · Paolo Ricci · Thibault Felix</p>
+    <p class="about-text">Laboratory for Urban Boundaries was founded to challenge and reconfigure the frameworks of urban development.</p>
+    <p class="about-text">We are a collective of architects and researchers who support grassroots movements for ecological and social justice through spatial interventions.</p>
     <div class="about-contact">
       <a href="mailto:hello@lub.global">hello@lub.global</a><br>
       Tøyengata 38A, 0578 Oslo
@@ -224,11 +137,6 @@ body.no-scroll { overflow: hidden; }
 </div>
 
 <script>
-/*
-===========================================
-SLIDES DATA
-===========================================
-*/
 const slides = [
   { image: "images/ravinevandring/damaged-pipe.jpg", title: "Damaged Infrastructure" },
   { image: "images/backhistory/flom-1967-boat.jpg", title: "Flom 1967" },
@@ -241,25 +149,20 @@ const slides = [
   { image: "images/dirty-business/skredkart.png", title: "Skredkart" }
 ];
 
-/*
-===========================================
-SLIDESHOW
-===========================================
-*/
 let current = 0;
 const total = slides.length;
 const slideshow = document.getElementById('slideshow');
 const currentEl = document.getElementById('current');
 const totalEl = document.getElementById('total');
+const aboutDiv = document.getElementById('about');
 
 if (totalEl) totalEl.textContent = total;
 
-// Create image elements
+// Create images
 slides.forEach((slide, i) => {
   const img = document.createElement('img');
   img.src = slide.image;
   img.className = 'slideshow-img' + (i === 0 ? ' active' : '');
-  img.alt = slide.title;
   slideshow.insertBefore(img, slideshow.firstChild);
 });
 
@@ -282,61 +185,32 @@ function prevSlide() {
   updateSlide();
 }
 
-document.getElementById('prev').onclick = function(e) { 
-  e.stopPropagation(); 
-  prevSlide(); 
-};
-document.getElementById('next').onclick = function(e) { 
-  e.stopPropagation(); 
-  nextSlide(); 
-};
+// Navigation Events
+document.getElementById('prev').onclick = (e) => { e.stopPropagation(); prevSlide(); };
+document.getElementById('next').onclick = (e) => { e.stopPropagation(); nextSlide(); };
+slideshow.onclick = (e) => { if(e.target.tagName !== 'BUTTON') nextSlide(); };
 
-// Advance slide on click (since we aren't opening a modal)
-slideshow.onclick = function(e) {
-  if (e.target.tagName === 'BUTTON') return;
-  nextSlide();
-};
-
-/*
-===========================================
-ABOUT
-===========================================
-*/
-const aboutDiv = document.getElementById('about');
-
-function openAbout() {
+// About Events
+document.getElementById('aboutBtn').onclick = (e) => {
+  e.preventDefault();
   aboutDiv.classList.add('active');
   document.body.classList.add('no-scroll');
-}
+};
 
-function closeAbout() {
+document.getElementById('aboutClose').onclick = () => {
   aboutDiv.classList.remove('active');
   document.body.classList.remove('no-scroll');
-}
-
-document.getElementById('aboutBtn').onclick = function(e) { 
-  e.preventDefault(); 
-  openAbout(); 
 };
 
-document.getElementById('aboutClose').onclick = function(e) {
-  closeAbout();
-};
-
-/*
-===========================================
-KEYBOARD
-===========================================
-*/
-document.onkeydown = function(e) {
+// Keyboard
+document.onkeydown = (e) => {
   if (e.key === 'Escape') {
-    closeAbout();
+    aboutDiv.classList.remove('active');
+    document.body.classList.remove('no-scroll');
   }
   if (e.key === 'ArrowLeft') prevSlide();
   if (e.key === 'ArrowRight') nextSlide();
 };
-
-updateSlide();
 </script>
 
 </body>
