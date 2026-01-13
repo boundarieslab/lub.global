@@ -226,24 +226,24 @@ body.no-scroll { overflow: hidden; }
 <script>
 /*
 ===========================================
-SLIDES DATA - Edit here to add/change images
+SLIDES DATA
 ===========================================
 */
 const slides = [
   { 
     image: "images/ravinevandring/damaged-pipe.jpg",
     title: "Damaged Infrastructure", 
-    desc: "Exposed pipe damage in the ravine system, documenting the effects of terrain instability on urban infrastructure." 
+    desc: "Exposed pipe damage in the ravine system." 
   },
   { 
     image: "images/backhistory/flom-1967-boat.jpg",
     title: "Flom 1967", 
-    desc: "Men in a boat loading supplies from a store during the 1967 floods. The 'Snarkjøp' store sign is visible." 
+    desc: "Men in a boat loading supplies from a store during the 1967 floods." 
   },
   { 
     image: "images/backhistory/flom-1967-bike.png",
     title: "Flom 1967 — Syklister", 
-    desc: "Cyclists navigating flooded streets during the 1967 floods on Romerike." 
+    desc: "Cyclists navigating flooded streets." 
   },
   { 
     image: "images/backhistory/terrain-1967.png",
@@ -258,12 +258,12 @@ const slides = [
   { 
     image: "images/backhistory/bulldozer-1950s.jpg",
     title: "Bulldoser 1950-tallet", 
-    desc: "Bulldozer operations in the 1950s, early documentation of mass earth movement." 
+    desc: "Bulldozer operations in the 1950s." 
   },
   { 
     image: "images/backhistory/excavation-1927.png",
     title: "Utgravning 1927", 
-    desc: "Archaeological excavation from 1927, one of the earliest documented terrain modifications." 
+    desc: "Archaeological excavation from 1927." 
   },
   { 
     image: "images/dirty-business/contemporary-2023.jpg",
@@ -279,7 +279,7 @@ const slides = [
 
 /*
 ===========================================
-SLIDESHOW
+SLIDESHOW LOGIC
 ===========================================
 */
 let current = 0;
@@ -288,27 +288,26 @@ const slideshow = document.getElementById('slideshow');
 const currentEl = document.getElementById('current');
 const totalEl = document.getElementById('total');
 
-totalEl.textContent = total;
+// Set the total count in the UI
+if(totalEl) totalEl.textContent = total;
 
-// Create image elements
+// Create image elements dynamically
 slides.forEach((slide, i) => {
   const img = document.createElement('img');
   img.src = slide.image;
   img.className = 'slideshow-img' + (i === 0 ? ' active' : '');
   img.alt = slide.title;
+  // Prepend to slideshow so they appear behind the arrows/counter
   slideshow.insertBefore(img, slideshow.firstChild);
 });
 
 const imgElements = document.querySelectorAll('.slideshow-img');
 
 function updateSlide() {
-  currentEl.textContent = current + 1;
+  if(currentEl) currentEl.textContent = current + 1;
   imgElements.forEach((img, i) => {
     img.classList.toggle('active', i === current);
   });
-  document.getElementById('modalTitle').textContent = slides[current].title;
-  document.getElementById('modalDesc').textContent = slides[current].desc;
-  document.getElementById('modalImgContainer').innerHTML = '<img src="' + slides[current].image + '" alt="' + slides[current].title + '">';
 }
 
 function nextSlide() {
@@ -321,49 +320,64 @@ function prevSlide() {
   updateSlide();
 }
 
-document.getElementById('prev').onclick = function(e) { e.stopPropagation(); prevSlide(); };
-document.getElementById('next').onclick = function(e) { e.stopPropagation(); nextSlide(); };
-document.getElementById('modalPrev').onclick = prevSlide;
-document.getElementById('modalNext').onclick = nextSlide;
+// Arrow Buttons
+document.getElementById('prev').onclick = function(e) { 
+  e.stopPropagation(); 
+  prevSlide(); 
+};
+document.getElementById('next').onclick = function(e) { 
+  e.stopPropagation(); 
+  nextSlide(); 
+};
 
+// Clicking the slideshow area also advances the slide
 slideshow.onclick = function(e) {
   if (e.target.tagName === 'BUTTON') return;
-  document.getElementById('modal').classList.add('active');
-  document.body.classList.add('no-scroll');
+  nextSlide();
 };
 
 /*
 ===========================================
-ABOUT
+ABOUT SECTION
 ===========================================
 */
 function openAbout() {
-  document.getElementById('about').classList.add('active');
-  document.body.classList.add('no-scroll');
+  const about = document.getElementById('about');
+  if (about) {
+    about.classList.add('active');
+    document.body.classList.add('no-scroll');
+  }
 }
 
 function closeAbout() {
-  document.getElementById('about').classList.remove('active');
-  document.body.classList.remove('no-scroll');
+  const about = document.getElementById('about');
+  if (about) {
+    about.classList.remove('active');
+    document.body.classList.remove('no-scroll');
+  }
 }
 
-document.getElementById('aboutBtn').onclick = function(e) { e.preventDefault(); openAbout(); };
+document.getElementById('aboutBtn').onclick = function(e) { 
+  e.preventDefault(); 
+  openAbout(); 
+};
+
 document.getElementById('aboutClose').onclick = closeAbout;
 
 /*
 ===========================================
-KEYBOARD
+KEYBOARD CONTROLS
 ===========================================
 */
 document.onkeydown = function(e) {
   if (e.key === 'Escape') {
-    closeModal();
     closeAbout();
   }
   if (e.key === 'ArrowLeft') prevSlide();
   if (e.key === 'ArrowRight') nextSlide();
 };
 
+// Run on page load
 updateSlide();
 </script>
 
