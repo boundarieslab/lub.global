@@ -230,56 +230,20 @@ SLIDES DATA
 ===========================================
 */
 const slides = [
-  { 
-    image: "images/ravinevandring/damaged-pipe.jpg",
-    title: "Damaged Infrastructure", 
-    desc: "Exposed pipe damage in the ravine system." 
-  },
-  { 
-    image: "images/backhistory/flom-1967-boat.jpg",
-    title: "Flom 1967", 
-    desc: "Men in a boat loading supplies from a store during the 1967 floods." 
-  },
-  { 
-    image: "images/backhistory/flom-1967-bike.png",
-    title: "Flom 1967 — Syklister", 
-    desc: "Cyclists navigating flooded streets." 
-  },
-  { 
-    image: "images/backhistory/terrain-1967.png",
-    title: "Terrengskader 1967", 
-    desc: "Terrain damage documented after the 1967 floods." 
-  },
-  { 
-    image: "images/backhistory/traktorvelt-1965.png",
-    title: "Traktorvelt 1965", 
-    desc: "Tractor accident from 1965 showing terrain instability." 
-  },
-  { 
-    image: "images/backhistory/bulldozer-1950s.jpg",
-    title: "Bulldoser 1950-tallet", 
-    desc: "Bulldozer operations in the 1950s." 
-  },
-  { 
-    image: "images/backhistory/excavation-1927.png",
-    title: "Utgravning 1927", 
-    desc: "Archaeological excavation from 1927." 
-  },
-  { 
-    image: "images/dirty-business/contemporary-2023.jpg",
-    title: "Contemporary Operations 2023", 
-    desc: "Current mass movement operations documented in 2023." 
-  },
-  { 
-    image: "images/dirty-business/skredkart.png",
-    title: "Skredkart", 
-    desc: "Landslide hazard mapping of the region." 
-  },
+  { image: "images/ravinevandring/damaged-pipe.jpg", title: "Damaged Infrastructure" },
+  { image: "images/backhistory/flom-1967-boat.jpg", title: "Flom 1967" },
+  { image: "images/backhistory/flom-1967-bike.png", title: "Flom 1967 — Syklister" },
+  { image: "images/backhistory/terrain-1967.png", title: "Terrengskader 1967" },
+  { image: "images/backhistory/traktorvelt-1965.png", title: "Traktorvelt 1965" },
+  { image: "images/backhistory/bulldozer-1950s.jpg", title: "Bulldoser 1950-tallet" },
+  { image: "images/backhistory/excavation-1927.png", title: "Utgravning 1927" },
+  { image: "images/dirty-business/contemporary-2023.jpg", title: "Contemporary Operations 2023" },
+  { image: "images/dirty-business/skredkart.png", title: "Skredkart" }
 ];
 
 /*
 ===========================================
-SLIDESHOW LOGIC
+SLIDESHOW
 ===========================================
 */
 let current = 0;
@@ -288,23 +252,21 @@ const slideshow = document.getElementById('slideshow');
 const currentEl = document.getElementById('current');
 const totalEl = document.getElementById('total');
 
-// Set the total count in the UI
-if(totalEl) totalEl.textContent = total;
+if (totalEl) totalEl.textContent = total;
 
-// Create image elements dynamically
+// Create image elements
 slides.forEach((slide, i) => {
   const img = document.createElement('img');
   img.src = slide.image;
   img.className = 'slideshow-img' + (i === 0 ? ' active' : '');
   img.alt = slide.title;
-  // Prepend to slideshow so they appear behind the arrows/counter
   slideshow.insertBefore(img, slideshow.firstChild);
 });
 
 const imgElements = document.querySelectorAll('.slideshow-img');
 
 function updateSlide() {
-  if(currentEl) currentEl.textContent = current + 1;
+  if (currentEl) currentEl.textContent = current + 1;
   imgElements.forEach((img, i) => {
     img.classList.toggle('active', i === current);
   });
@@ -320,7 +282,6 @@ function prevSlide() {
   updateSlide();
 }
 
-// Arrow Buttons
 document.getElementById('prev').onclick = function(e) { 
   e.stopPropagation(); 
   prevSlide(); 
@@ -330,7 +291,7 @@ document.getElementById('next').onclick = function(e) {
   nextSlide(); 
 };
 
-// Clicking the slideshow area also advances the slide
+// Advance slide on click (since we aren't opening a modal)
 slideshow.onclick = function(e) {
   if (e.target.tagName === 'BUTTON') return;
   nextSlide();
@@ -338,23 +299,19 @@ slideshow.onclick = function(e) {
 
 /*
 ===========================================
-ABOUT SECTION
+ABOUT
 ===========================================
 */
+const aboutDiv = document.getElementById('about');
+
 function openAbout() {
-  const about = document.getElementById('about');
-  if (about) {
-    about.classList.add('active');
-    document.body.classList.add('no-scroll');
-  }
+  aboutDiv.classList.add('active');
+  document.body.classList.add('no-scroll');
 }
 
 function closeAbout() {
-  const about = document.getElementById('about');
-  if (about) {
-    about.classList.remove('active');
-    document.body.classList.remove('no-scroll');
-  }
+  aboutDiv.classList.remove('active');
+  document.body.classList.remove('no-scroll');
 }
 
 document.getElementById('aboutBtn').onclick = function(e) { 
@@ -362,11 +319,13 @@ document.getElementById('aboutBtn').onclick = function(e) {
   openAbout(); 
 };
 
-document.getElementById('aboutClose').onclick = closeAbout;
+document.getElementById('aboutClose').onclick = function(e) {
+  closeAbout();
+};
 
 /*
 ===========================================
-KEYBOARD CONTROLS
+KEYBOARD
 ===========================================
 */
 document.onkeydown = function(e) {
@@ -377,7 +336,6 @@ document.onkeydown = function(e) {
   if (e.key === 'ArrowRight') nextSlide();
 };
 
-// Run on page load
 updateSlide();
 </script>
 
